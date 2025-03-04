@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euo pipefail
+
+# This script generates a PostgreSQL connection string from a service entry in the .pg_service.conf file.
+# If a service name is provided as an argument, it uses that; otherwise, it prompts the user to select a service.
+
+# Set the service name to the first argument, if provided; otherwise, use a selection from pg_service_list piped through fzf.
+SVC=${1:-$(~/bin/pg_service ls | fzf)}
+
+# Use Python to parse the .pg_service.conf file and print the connection string.
+# The heredoc syntax (<<END ... END) passes a Python script directly into python3's stdin.
+python3 - "$SVC" <<END
+import os, sys, configparser
+
+# Initialize a ConfigParser with default values for port and password.
+cfg = configparser.ConfigParser(defaults={'port': '5432', 'password':''})
+
+# Read the .pg_service.conf file from the user's home directory.
+cfg.read(os.path.expanduser("~/.pg_service.conf"))
+
+# Extract the service configuration using the service name provided as a command-line argument.
+service_config = cfg[sys.argv[1]]
+
+# Format and print the PostgreSQL connection string using values from the service configuration.
+# The connection string format is: postgresql://{user}:{password}@{host}:{port}/{dbname}
+connection_string = "postgresql://{user}:{password}@{host}:{port}/{dbname}".format(**service_config)
+print(connection_string)
+END

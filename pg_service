@@ -1,0 +1,29 @@
+#!/bin/bash
+
+BIN_PATH="$(dirname $0)/bin"
+
+case "$1" in
+    set)
+        shift
+        "$BIN_PATH/pg_service_set" "$@"
+        ;;
+    edit)
+        shift
+        "$BIN_PATH/pg_service_edit" "$@"
+        ;;
+    ls)
+        shift
+        "$BIN_PATH/pg_service_ls" "$@"
+        ;;
+    get)
+        shift
+        "$BIN_PATH/pg_service_get" "$@"
+        ;;
+    completion)
+        shift
+        "$BIN_PATH/pg_service_completion" "$@"
+        ;;
+    *)
+        echo "Usage: pg_service {set|edit|list|get} [args]"
+        ;;
+esac

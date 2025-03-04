@@ -1,0 +1,44 @@
+#!/bin/bash
+
+if [ "$1" == "zsh" ]; then
+    cat <<'EOF'
+#compdef pg_service
+compdef _pg_service pg_service
+
+_pg_service()
+{
+    local -a subcommands
+    subcommands=(
+    'edit'
+    'get'
+    'ls'
+    'name'
+    'set'
+    'completion'
+    )
+
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    if (( CURRENT == 2 )); then
+        _describe -t subcommands 'pg_service command' subcommands
+    elif (( CURRENT == 3 )) && [[ "$words[2]" == "get" ]]; then
+        local -a get_opts
+        get_opts=("${(@f)$(pg_service ls)}")
+        _describe 'values' get_opts
+    elif (( CURRENT >= 3 )) && [[ "$words[2]" == "set" ]]; then
+        local -a set_opts
+        set_opts=("${(@f)$(pg_service ls)}" '--dry-run')
+        _describe 'values' set_opts
+    else
+        _default
+    fi
+}
+
+if [ "$funcstack[1]" = "_pg_service" ]; then
+    _pg_service
+fi
+
+EOF
+    exit
+fi
