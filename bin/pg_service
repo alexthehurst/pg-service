@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BIN_PATH="$(dirname $0)/bin"
+BIN_PATH="$(dirname $0)"
 
 case "$1" in
     set)

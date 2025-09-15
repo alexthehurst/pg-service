@@ -18,7 +18,7 @@
 1. Clone this repository:
    ```sh
    git clone <repository_url>
-   cd pg_service
+   cd pg-service
    ```
 2. Ensure the scripts are executable:
    ```sh
