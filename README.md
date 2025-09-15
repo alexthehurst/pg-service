@@ -20,11 +20,7 @@
    git clone <repository_url>
    cd pg-service
    ```
-2. Ensure the scripts are executable:
-   ```sh
-   chmod +x pg_service bin/*
-   ```
-3. Add the `pg_service` script to your `PATH`:
+2. Add `pg_service` to your shell configuration:
    ```sh
    export PATH="<wherever you put the service>:$PATH"
    alias pgs=pg_service
